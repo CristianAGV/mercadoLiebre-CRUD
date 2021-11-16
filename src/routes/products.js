@@ -8,14 +8,14 @@ const { body } = require('express-validator')
 const productsController = require('../controllers/productsController');
 
 let createProductValidations = [
-    body('name').notEmpty().withMessage('Debes ponerle un nombre valido al producto'),
+    body('name').trim().notEmpty().withMessage('Debes ponerle un nombre valido al producto'),
 
-    body('price').notEmpty().withMessage('El producto debe tener precio'),
+    body('price').toInt().notEmpty().withMessage('El producto debe tener precio'),
 
-    body('discount').notEmpty().withMessage('Si no tiene descuento debes poner 0'),
+    body('discount').toInt().notEmpty().withMessage('Si no tiene descuento debes poner 0'),
 
 
-    body('description').notEmpty().withMessage('El producto debe tener una breve descripcion').bail()
+    body('description').trim().replace(/(\r\n|\n|\r)/gm, "").notEmpty().withMessage('El producto debe tener una breve descripcion').bail()
     .isLength({min: 10}).withMessage('Debe tener minimo 10 caracteres la descripcion')
 ]
 

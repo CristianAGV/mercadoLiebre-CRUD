@@ -57,7 +57,7 @@ const controller = {
 
 		} else {
 			res.render('product-create-form', { errors: errors.array(), old: req.body })
-			console.log(errors)
+			console.log(req.body)
 		}
 		
 		// Do the magic

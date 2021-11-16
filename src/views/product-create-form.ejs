@@ -27,7 +27,7 @@
                 name="name"
                 placeholder="Ej: Zapatillas Reebok"
                 class="form-input"
-                value="<%= locals.old && old.name ?  old.name : '-'%>"
+                value="<%= locals.old && old.name ?  old.name : ''%>"
               />
             </div>
             <div class="col-12 col-md-6">
@@ -62,12 +62,9 @@
             </div>
             <div class="col-12">
               <label for="description" class="form-label">Descipción:</label>
-              <textarea
-                name="description"
-                id="description"
-                class="form-input"
-                value="<%= locals.old && old.description ?  old.description : '' %> "
-              ></textarea>
+              <textarea name="description" id="description" class="form-input">
+                <%= locals.old && old.description ?  old.description : '' %>
+              </textarea>
             </div>
 
             <div class="col-12 col-md-6">
