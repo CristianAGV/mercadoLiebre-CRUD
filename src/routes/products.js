@@ -7,17 +7,7 @@ const { body } = require('express-validator')
 // ************ Controller Require ************
 const productsController = require('../controllers/productsController');
 
-let createProductValidations = [
-    body('name').trim().notEmpty().withMessage('Debes ponerle un nombre valido al producto'),
 
-    body('price').toInt().notEmpty().withMessage('El producto debe tener precio'),
-
-    body('discount').toInt().notEmpty().withMessage('Si no tiene descuento debes poner 0'),
-
-
-    body('description').trim().replace(/(\r\n|\n|\r)/gm, "").notEmpty().withMessage('El producto debe tener una breve descripcion').bail()
-    .isLength({min: 10}).withMessage('Debe tener minimo 10 caracteres la descripcion')
-]
 
 let storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -27,6 +17,35 @@ let storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 })
+
+let createProductValidations = [
+    body('name').trim().notEmpty().withMessage('Debes ponerle un nombre valido al producto'),
+
+    body('price').toInt().notEmpty().withMessage('El producto debe tener precio'),
+
+    body('discount').toInt().notEmpty().withMessage('Si no tiene descuento debes poner 0'),
+
+
+    body('description').trim().replace(/(\r\n|\n|\r)/gm, "").notEmpty().withMessage('El producto debe tener una breve descripcion').bail()
+    .isLength({min: 10}).withMessage('Debe tener minimo 10 caracteres la descripcion'),
+
+    body('productImage').custom((value, { req }) => {
+        let file = req.file
+        let acceptedExtensions = ['.png', '.jpg']
+        
+
+        if(!file) {
+            throw new Error('Debes subir la imagen del producto')
+        } else {
+            let fileExtension = path.extname(file.originalname)
+            if(!acceptedExtensions.includes(fileExtension)) {
+                throw new Error(`Solo se aceptan imagenes en formato ${acceptedExtensions.join(", ")}`)
+            }
+        }
+
+        return true
+    })
+]
 
 let upload = multer({ storage })
 
